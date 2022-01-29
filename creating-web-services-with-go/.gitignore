@@ -1,5 +1,8 @@
 # mysql-data
 data/
 
+# upload files
+uploads/
+
 # Linux binary build
 inventoryservice
