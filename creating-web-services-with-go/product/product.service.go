@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/prasnitt/go/inventoryservice/cors"
 )
 
 const productsPath = "products"
@@ -34,6 +36,8 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.WriteHeader(http.StatusCreated)
+	case http.MethodOptions:
+		return
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
@@ -58,7 +62,6 @@ func handleProduct(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		p := product(id)
 		if p == nil {
-			log.Print(err)
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
@@ -87,6 +90,8 @@ func handleProduct(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
+	case http.MethodOptions:
+		return
 	case http.MethodDelete:
 		remove(id)
 	default:
@@ -98,6 +103,6 @@ func SetupRoutes(apiBasePath string) {
 	productsHandler := http.HandlerFunc(handleProducts)
 	productHandler := http.HandlerFunc(handleProduct)
 
-	http.Handle(fmt.Sprintf("%s/%s", apiBasePath, productsPath), productsHandler)
-	http.Handle(fmt.Sprintf("%s/%s/", apiBasePath, productsPath), productHandler)
+	http.Handle(fmt.Sprintf("%s/%s", apiBasePath, productsPath), cors.Middleware(productsHandler))
+	http.Handle(fmt.Sprintf("%s/%s/", apiBasePath, productsPath), cors.Middleware(productHandler))
 }

@@ -8,11 +8,12 @@ import (
 )
 
 const basePath = "/api"
+const port = ":5000"
 
 func main() {
 	product.Init("products.json")
 	product.SetupRoutes(basePath)
-	err := http.ListenAndServe(":5000", nil)
+	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
