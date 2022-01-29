@@ -73,6 +73,20 @@ func products() []Product {
 	return pp
 }
 
+func TopTenProducts() []Product {
+
+	pp := products()
+	l := 10
+	if len(pp) < l {
+		l = len(pp)
+	}
+	sort.Slice(pp, func(i, j int) bool {
+		return pp[i].QuantityOnHand > pp[j].QuantityOnHand
+	})
+
+	return pp[:l]
+}
+
 func productIds() []int {
 	productMap.RLock()
 	defer productMap.RUnlock()
