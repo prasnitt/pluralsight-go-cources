@@ -1,3 +1,5 @@
 # mysql-data
 data/
 
+# Linux binary build
+inventoryservice
